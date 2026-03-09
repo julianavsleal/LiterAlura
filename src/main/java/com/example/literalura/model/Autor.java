@@ -9,61 +9,61 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "autores")
 public class Autor {
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private Long id;
 
-private String nome;
-private Integer anoNascimento;
-private Integer anoFalecimento;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String nome;
+    private Integer anoNascimento;
+    private Integer anoFalecimento;
 
     @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Livro> livros = new ArrayList<>();
 
-    public Autor(){
-
+    public Autor() {
     }
 
-    public Autor(DadosAutores dadosAutores){
+    public Autor(DadosAutores dadosAutores) {
         this.nome = dadosAutores.nome();
         this.anoNascimento = dadosAutores.anoNascimento();
-        this.anoFalecimento = dadosAutores.anoNascimento();
+        this.anoFalecimento = dadosAutores.anoFalecimento();
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getNome() {
         return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
     }
 
     public Integer getAnoNascimento() {
         return anoNascimento;
     }
 
-    public void setAnoNascimento(Integer anoNascimento) {
-        this.anoNascimento = anoNascimento;
-    }
-
     public Integer getAnoFalecimento() {
         return anoFalecimento;
     }
 
-    public void setAnoFalecimento(Integer anoFalecimento) {
-        this.anoFalecimento = anoFalecimento;
-    }
-
     public List<Livro> getLivros() {
         return livros;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setAnoNascimento(Integer anoNascimento) {
+        this.anoNascimento = anoNascimento;
+    }
+
+    public void setAnoFalecimento(Integer anoFalecimento) {
+        this.anoFalecimento = anoFalecimento;
     }
 
     public void setLivros(List<Livro> livros) {
@@ -72,13 +72,18 @@ private Integer anoFalecimento;
 
     @Override
     public String toString() {
+
         String nomesLivros = livros.stream()
                 .map(Livro::getTitulo)
                 .collect(Collectors.joining(" | "));
 
-        return "Autor" + nome + '\'' +
-                ", Ano de Nascimento=" + anoNascimento +
-                ", Ano de Falecimento=" + anoFalecimento +
-                ", livros=" + livros;
+        return """
+                -------- AUTOR --------
+                Nome: %s
+                Ano de Nascimento: %s
+                Ano de Falecimento: %s
+                Livros: %s
+                """.formatted(nome, anoNascimento, anoFalecimento, nomesLivros);
     }
+
 }
